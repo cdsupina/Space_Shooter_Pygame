@@ -15,7 +15,8 @@ class Enemy(pygame.sprite.Sprite):
     def __init__(self,image,speed,displacement,init_x,init_y):
         super().__init__()
 
-        self.speed = speed
+        self.x_speed = speed
+        self.y_speed = speed
         self.image = pygame.image.load(image)
         self.rect = self.image.get_rect()
         self.max_displacement = displacement

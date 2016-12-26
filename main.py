@@ -49,46 +49,42 @@ quit_button = pygame.image.load(quit_button_img_name).convert()
 continue_button = pygame.image.load(continue_button_img_name).convert()
 pause_menu = pygame.image.load(pause_menu_img_name).convert_alpha()
 
-
 player = Ship(player_img_name,10)
 player.rect.x = 100
 player.rect.y = 100
-
 player_x_change = 0
 player_y_change = 0
 
-#enemy_1 = Enemy(enemy_img_name,4,50,200,200)
-
-
 scene_1_sprite_group = pygame.sprite.Group()
 scene_1_sprite_group.add(player)
-#scene_1_sprite_group.add(enemy_1)
 
-#setup a paused state
 paused = False
 
 lasers = []
 enemies = []
-#enemies.append(enemy_1)
 
 scene_0_background_idx = 0
 scene_0_background_animation_time = 150
 scene_0_current_animation_time = 100
+
 while True:
 
     dt = clock.tick(fps)
     speed = float(dt)/64
 
     ##########SCENE-RENDERING#########
+
+    #rendering for title scene
     if scene == 0:
 
-
-
+        #animate background for title screen
         if scene_0_current_animation_time >= scene_0_background_animation_time:
 
             scene_0_current_animation_time = 0
             screen.blit(scene_0_backgrounds[scene_0_background_idx],(0,0))
             screen.blit(title,(0,0))
+            start = screen.blit(start_button,(220,200))
+            quit = screen.blit(quit_button,(220,300))
             scene_0_background_idx += 1
         else:
             scene_0_current_animation_time += dt
@@ -96,11 +92,7 @@ while True:
         if scene_0_background_idx > 2:
             scene_0_background_idx = 0
 
-
-        start = screen.blit(start_button,(220,200))
-        quit = screen.blit(quit_button,(220,300))
-
-
+    #rendering for the firsl level scene
     elif scene == 1:
         screen.blit(scene_1_background,(0,0))
         scene_1_sprite_group.draw(screen)
@@ -115,14 +107,12 @@ while True:
                 if l.time_spawned >= 1000:
                     scene_1_sprite_group.remove(l)
                     lasers.remove(l)
-                    #l = None
                 for e in enemies:
                     if l.rect.colliderect(e.rect):
                         scene_1_sprite_group.remove(l)
                         scene_1_sprite_group.remove(e)
                         lasers.remove(l)
                         enemies.remove(e)
-                        #l = None
 
             for e in enemies:
 
@@ -130,19 +120,21 @@ while True:
 
                 #print(e.current_displacement)
                 if e.current_displacement>=e.max_displacement:
-                    e.speed = -e.speed
+                    e.x_speed = -e.x_speed
 
-                e.rect.x += e.speed*speed
+                if e.rect.y >= screen_height - e.image.get_height() or e.rect.y <= 0:
+                    e.y_speed = -e.y_speed
+
+                e.rect.x += e.x_speed*speed
+                e.rect.y += e.y_speed*speed
+
                 if e.rect.x >= (e.loc_init[0]+e.max_displacement):
                     e.rect.x = e.loc_init[0]+e.max_displacement
                 elif e.rect.x <= (e.loc_init[0]-e.max_displacement):
                     e.rect.x = e.loc_init[0]-e.max_displacement
+
             player.rect.x += player_x_change*speed
             player.rect.y += player_y_change*speed
-
-
-
-
 
 
     ##########EVENT-LISTENING##########
@@ -157,10 +149,10 @@ while True:
                 if scene == 0:
                     if start.collidepoint(pygame.mouse.get_pos()):
                         scene = 1
-                        enemy_count = rand.randint(10,15)
+                        enemy_count = 10
                         i = 0
                         while i< enemy_count:
-                            enemy = Enemy(enemy_img_name,4,50,100+i*20,200)
+                            enemy = Enemy(enemy_img_name,4,50,100+i*20,1)
                             scene_1_sprite_group.add(enemy)
                             enemies.append(enemy)
                             i += 1
@@ -188,8 +180,7 @@ while True:
                         new_laser = Player_Laser(player_laser_img_name,20,(player.rect.x+(player.width/2)-(5/2)),player.rect.y)
                         scene_1_sprite_group.add(new_laser)
                         lasers.append(new_laser)
-
-                        print(lasers)
+                        #print(lasers)
 
         if event.type == KEYUP:
             if event.key == K_w:
