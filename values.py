@@ -16,3 +16,5 @@ pause_menu_img_name = "assets/images/pause_menu.png"
 player_img_name = "assets/sprites/player_ship.png"
 enemy_img_name = "assets/sprites/enemy_ship.png"
 player_laser_img_name = "assets/sprites/player_blaster.png"
+
+portal_unexplored_img_names = ["assets/sprites/portal_unexplored_1.png","assets/sprites/portal_unexplored_2.png","assets/sprites/portal_unexplored_3.png"]

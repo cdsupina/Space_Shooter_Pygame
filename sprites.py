@@ -15,6 +15,40 @@ class Ship(pygame.sprite.Sprite):
         self.x_change = 0
         self.y_change = 0
 
+    def behave(self,speed):
+        self.rect.x += self.x_change*speed
+        self.rect.y += self.y_change*speed
+
+        if self.rect.x >= screen_width-20:
+            self.rect.x = screen_width-20
+        if self.rect.x <= 0:
+            self.rect.x = 0
+        if self.rect.y >= screen_height-20:
+            self.rect.y = screen_height-20
+        if self.rect.y <= 0:
+            self.rect.y = 0
+
+
+    def accelerate(self,direction):
+        if direction == 0:
+            self.y_change = -self.speed
+        if direction == 1:
+            self.y_change = self.speed
+        if direction == 2:
+            self.x_change = -self.speed
+        if direction == 3:
+            self.x_change = self.speed
+
+    def deccelerate(self,direction):
+        if direction == 0:
+            self.y_change = 0
+        if direction == 1:
+            self.y_change = 0
+        if direction == 2:
+            self.x_change = 0
+        if direction == 3:
+            self.x_change = 0
+
 class Enemy(pygame.sprite.Sprite):
     def __init__(self,room,image,speed,displacement,init_x,init_y):
         super().__init__()
@@ -76,6 +110,34 @@ class Player_Laser(pygame.sprite.Sprite):
             self.room.enemy_sprite_group.remove(enemy)
             self.room.lasers.remove(self)
             self.room.enemies.remove(enemy)
+            self.room.enemy_count -= 1
 
     def __repr__(self):
         return "X coor: " + str(self.rect.x) + " Y coor: " + str(self.rect.y) + " Time: " + str(self.time_spawned)
+
+class Portal(pygame.sprite.Sprite):
+    def __init__(self,room,frames,ani_time,x,y):
+        super().__init__()
+
+        self.room = room
+        self.frames = frames
+        self.current_frame = frames[0]
+        self.image = pygame.image.load(self.current_frame)
+        self.frame_idx = 0
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        self.ani_time = ani_time
+        self.current_ani_time = ani_time
+
+    def animate(self,dt):
+        if self.current_ani_time >= self.ani_time:
+            self.current_ani_time = 0
+            self.image = pygame.image.load(self.current_frame)
+
+            self.frame_idx += 1
+            if self.frame_idx >= len(self.frames):
+                self.frame_idx = 0
+            self.current_frame = self.frames[self.frame_idx]
+        else:
+            self.current_ani_time += dt
