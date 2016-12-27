@@ -43,13 +43,13 @@ class Room():
 
         i=0
         while i < self.enemy_number:
-            enemy = Enemy(enemy_img_name,4,50,100+i*20,1)
+            enemy = Enemy(self,enemy_img_name,4,50,100+i*20,1)
             self.enemy_sprite_group.add(enemy)
             self.enemies.append(enemy)
             i += 1
 
     def generate_player_laser(self,player):
-        new_laser = Player_Laser(player_laser_img_name,20,(player.rect.x+(player.width/2)-(5/2)),player.rect.y)
+        new_laser = Player_Laser(self,player_laser_img_name,20,(player.rect.x+(player.width/2)-(5/2)),player.rect.y)
         self.laser_sprite_group.add(new_laser)
         self.lasers.append(new_laser)
 

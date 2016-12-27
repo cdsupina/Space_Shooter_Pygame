@@ -81,18 +81,11 @@ while True:
             quit = screen.blit(quit_button,(220,266))
             continue_but = screen.blit(continue_button,(220,193))
         elif not paused:
+
             for l in room_1.lasers:
-                l.rect.y += -l.speed*speed
-                l.time_spawned += dt
-                if l.time_spawned >= 1000:
-                    room_1.laser_sprite_group.remove(l)
-                    room_1.lasers.remove(l)
+                l.behave(speed,dt)
                 for e in room_1.enemies:
-                    if l.rect.colliderect(e.rect):
-                        room_1.laser_sprite_group.remove(l)
-                        room_1.enemy_sprite_group.remove(e)
-                        room_1.lasers.remove(l)
-                        room_1.enemies.remove(e)
+                    l.on_collision(e)
 
             for e in room_1.enemies:
                 e.behave(speed)
@@ -151,7 +144,5 @@ while True:
                     paused = True
                 elif paused:
                     paused = False
-
-
 
     pygame.display.update()
