@@ -40,10 +40,10 @@ player = Ship(player_img_name,10,100,100)
 paused = False
 
 #initialize first room
-room_1 = Room(1,5,[0,1,2,3])
+level_1 = Level(12,[(2,0),(4,0),(0,1),(2,1),(4,1),(0,2),(1,2),(2,2,"*"),(3,2),(4,2),(2,3),(2,4)])
 
 #add the player to the allies sprite group
-room_1.ally_sprite_group.add(player)
+level_1.current_room.ally_sprite_group.add(player)
 
 scene_0_images = [(title,(0,0))]
 scene_0_buttons = [(start_button,(220,200)),(quit_button,(220,300))]
@@ -67,20 +67,26 @@ while True:
 
     #rendering for the firsl level scene
     elif scene == 1:
-        room_1.draw_all(screen,dt)
+        level_1.current_room.draw_all(screen,dt)
 
         if paused:
             pause_menu.display(screen,dt)
 
         elif not paused:
 
-            for l in room_1.lasers:
+            print(level_1.current_room)
+
+            for l in level_1.current_room.lasers:
                 l.behave(speed,dt)
-                for e in room_1.enemies:
+                for e in level_1.current_room.enemies:
                     l.on_collision(e)
 
-            for e in room_1.enemies:
+            for e in level_1.current_room.enemies:
                 e.behave(speed)
+
+            for p in level_1.current_room.portals:
+                p.on_collision(player,screen)
+
 
             player.behave(speed)
 
@@ -88,7 +94,7 @@ while True:
     ##########EVENT-LISTENING##########
     for event in pygame.event.get():
         #print the events
-        print(event)
+        #print(event)
         if event.type == QUIT:
             exit()
 
@@ -97,7 +103,7 @@ while True:
                 if scene == 0:
                     if title_screen.buttons[0].collidepoint(pygame.mouse.get_pos()):
                         scene = 1
-                        room_1.generate(screen)
+                        level_1.current_room.generate(screen)
 
                     if title_screen.buttons[1].collidepoint(pygame.mouse.get_pos()):
                         exit()
@@ -119,7 +125,7 @@ while True:
                 elif event.key == K_d:
                     player.accelerate(3)
                 elif event.key == K_SPACE:
-                    room_1.generate_player_laser(player)
+                    level_1.current_room.generate_player_laser(player)
 
         if event.type == KEYUP:
             if event.key == K_w:

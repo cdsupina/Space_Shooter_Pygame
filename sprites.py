@@ -116,7 +116,7 @@ class Player_Laser(pygame.sprite.Sprite):
         return "X coor: " + str(self.rect.x) + " Y coor: " + str(self.rect.y) + " Time: " + str(self.time_spawned)
 
 class Portal(pygame.sprite.Sprite):
-    def __init__(self,room,frames,ani_time,x,y):
+    def __init__(self,room,level,frames,ani_time,x,y):
         super().__init__()
 
         self.room = room
@@ -129,6 +129,7 @@ class Portal(pygame.sprite.Sprite):
         self.rect.y = y
         self.ani_time = ani_time
         self.current_ani_time = ani_time
+        self.level = level
 
     def animate(self,dt):
         if self.current_ani_time >= self.ani_time:
@@ -141,3 +142,37 @@ class Portal(pygame.sprite.Sprite):
             self.current_frame = self.frames[self.frame_idx]
         else:
             self.current_ani_time += dt
+
+    def on_collision(self,player,screen):
+        if self.rect.colliderect(player.rect):
+            print("portal touching player")
+            if self.rect.x == (screen_width/2)-20 and self.rect.y == 0:
+                print("top portal touching player")
+                self.level.current_room_coor[1] -= 1
+                self.level.current_room = self.level.level_map[self.level.current_room_coor[1]][self.level.current_room_coor[0]]
+                self.level.current_room.generate(screen)
+                self.level.current_room.ally_sprite_group.add(player)
+
+            if self.rect.x == screen_width-40 and self.rect.y == (screen_height/2)-20:
+                print("right portal touching player")
+                self.level.current_room_coor[0] += 1
+                self.level.current_room = self.level.level_map[self.level.current_room_coor[1]][self.level.current_room_coor[0]]
+                self.level.current_room.generate(screen)
+                self.level.current_room.ally_sprite_group.add(player)
+
+            if self.rect.x == (screen_width/2)-20 and self.rect.y == screen_height-40:
+                print("bottom portal touching player")
+                self.level.current_room_coor[1] += 1
+                self.level.current_room = self.level.level_map[self.level.current_room_coor[1]][self.level.current_room_coor[0]]
+                self.level.current_room.generate(screen)
+                self.level.current_room.ally_sprite_group.add(player)
+
+            if self.rect.x == 0 and self.rect.y == (screen_height/2)-20:
+                print("left portal touching player")
+                self.level.current_room_coor[0] -= 1
+                self.level.current_room = self.level.level_map[self.level.current_room_coor[1]][self.level.current_room_coor[0]]
+                self.level.current_room.generate(screen)
+                self.level.current_room.ally_sprite_group.add(player)
+
+            player.rect.x = 320
+            player.rect.y = 240
