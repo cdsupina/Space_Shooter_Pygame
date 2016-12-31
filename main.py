@@ -42,7 +42,7 @@ paused = False
 
 #initialize first room
 
-size = 5
+size = 6
 spaces = size*size
 room_count = spaces//2
 center = (size//2,size//2)
@@ -70,21 +70,21 @@ for row in range(size):
 
 coors_generated = 5
 
-while coors_generated < 12:
+while coors_generated < room_count:
 
     y=0
     for row in floor_map:
         room_gen = rand.randint(0,size-1)
-        if row[room_gen] == None and coors_generated < 12:
+        if row[room_gen] == None and coors_generated < room_count:
             coor_candidate = (room_gen,y)
             coor_added = False
             for coor in coors:
-                if coor_candidate[0] == coor[0]+1  or coor_candidate[0] == coor[0]-1 or coor_candidate[1] == coor[1]+1 or coor_candidate[1] == coor[1]-1:
+                if coor_candidate[1] == coor[1] and coor_candidate[0] == coor[0]+1 or coor_candidate[1] == coor[1] and coor_candidate[0] == coor[0]-1 or coor_candidate[0] == coor[0] and coor_candidate[1] == coor[1]+1 or coor_candidate[0] == coor[0] and coor_candidate[1] == coor[1]-1:
                     coors_generated += 1
                     coors.append(coor_candidate)
                     coor_added = True
                     row[room_gen] = coor_candidate
-                    print(coors)
+                    #print(coors)
                 if coor_added:
                     break
         #print(floor_map)
@@ -129,7 +129,7 @@ while True:
 
         elif not paused:
 
-            print(level_1.current_room)
+            #print(level_1.current_room)
 
             for l in level_1.current_room.lasers:
                 l.behave(speed,dt)

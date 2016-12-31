@@ -145,9 +145,9 @@ class Portal(pygame.sprite.Sprite):
 
     def on_collision(self,player,screen):
         if self.rect.colliderect(player.rect):
-            print("portal touching player")
+            #print("portal touching player")
             if self.rect.x == (screen_width/2)-20 and self.rect.y == 0:
-                print("top portal touching player")
+                #print("top portal touching player")
                 self.level.current_room_coor[1] -= 1
                 self.level.current_room = self.level.level_map[self.level.current_room_coor[1]][self.level.current_room_coor[0]]
                 self.level.current_room.generate(screen)
@@ -156,7 +156,7 @@ class Portal(pygame.sprite.Sprite):
                 player.rect.y = screen_height - 60
 
             if self.rect.x == screen_width-40 and self.rect.y == (screen_height/2)-20:
-                print("right portal touching player")
+                #print("right portal touching player")
                 self.level.current_room_coor[0] += 1
                 self.level.current_room = self.level.level_map[self.level.current_room_coor[1]][self.level.current_room_coor[0]]
                 self.level.current_room.generate(screen)
@@ -165,7 +165,7 @@ class Portal(pygame.sprite.Sprite):
                 player.rect.y = (screen_height/2)-10
 
             if self.rect.x == (screen_width/2)-20 and self.rect.y == screen_height-40:
-                print("bottom portal touching player")
+                #print("bottom portal touching player")
                 self.level.current_room_coor[1] += 1
                 self.level.current_room = self.level.level_map[self.level.current_room_coor[1]][self.level.current_room_coor[0]]
                 self.level.current_room.generate(screen)
@@ -174,7 +174,7 @@ class Portal(pygame.sprite.Sprite):
                 player.rect.y = 60
 
             if self.rect.x == 0 and self.rect.y == (screen_height/2)-20:
-                print("left portal touching player")
+                #print("left portal touching player")
                 self.level.current_room_coor[0] -= 1
                 self.level.current_room = self.level.level_map[self.level.current_room_coor[1]][self.level.current_room_coor[0]]
                 self.level.current_room.generate(screen)
