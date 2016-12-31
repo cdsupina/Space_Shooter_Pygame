@@ -17,5 +17,6 @@ player_img_name = "assets/sprites/player_ship.png"
 enemy_img_name = "assets/sprites/enemy_ship.png"
 player_laser_img_name = "assets/sprites/player_blaster.png"
 scene_1_start_room = "assets/images/start_room_temp.png"
+scene_1_boss_room = "assets/images/boss_room.png"
 
 portal_unexplored_img_names = ["assets/sprites/portal_unexplored_1.png","assets/sprites/portal_unexplored_2.png","assets/sprites/portal_unexplored_3.png"]

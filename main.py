@@ -6,6 +6,7 @@ import random as rand
 from values import *
 from levels import *
 from splash_screens import *
+import math
 
 #setup frames per second
 clock = pygame.time.Clock()
@@ -40,8 +41,62 @@ player = Ship(player_img_name,10,100,100)
 paused = False
 
 #initialize first room
-level_1 = Level(12,[(2,0),(4,0),(0,1),(2,1),(4,1),(0,2),(1,2),(2,2,"*"),(3,2),(4,2),(2,3),(2,4)])
 
+size = 5
+spaces = size*size
+room_count = spaces//2
+center = (size//2,size//2)
+
+floor_map = []
+coors = []
+#first run through, generate map full of coordinates, marking the center coordinate appropriatly
+for row in range(size):
+    new_row = []
+    for col in range(size):
+        current_coor = (col,row)
+        if current_coor == (center):
+            new_row.append((col,row,"*"))
+            coors.append((col,row,"*"))
+        elif current_coor == (center[0]+1,center[1]) or current_coor == (center[0]-1,center[1]) or current_coor == (center[0],center[1]+1) or current_coor == (center[0],center[1]-1):
+            new_row.append((col,row))
+            coors.append((col,row))
+        else:
+            new_row.append(None)
+    floor_map.append(new_row)
+
+#generate rest of rooms
+
+#print(coors)
+
+coors_generated = 5
+
+while coors_generated < 12:
+
+    y=0
+    for row in floor_map:
+        room_gen = rand.randint(0,size-1)
+        if row[room_gen] == None and coors_generated < 12:
+            coor_candidate = (room_gen,y)
+            coor_added = False
+            for coor in coors:
+                if coor_candidate[0] == coor[0]+1  or coor_candidate[0] == coor[0]-1 or coor_candidate[1] == coor[1]+1 or coor_candidate[1] == coor[1]-1:
+                    coors_generated += 1
+                    coors.append(coor_candidate)
+                    coor_added = True
+                    row[room_gen] = coor_candidate
+                    print(coors)
+                if coor_added:
+                    break
+        #print(floor_map)
+        y += 1
+
+
+
+print(coors)
+for row in floor_map:
+    print(row)
+#level_1 = Level([(2,0),(4,0,"x"),(0,1),(2,1),(4,1),(0,2),(1,2),(2,2,"*"),(3,2),(4,2),(2,3),(2,4)])
+level_1 = Level(coors)
 #add the player to the allies sprite group
 level_1.current_room.ally_sprite_group.add(player)
 

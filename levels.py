@@ -4,10 +4,10 @@ from sprites import *
 from values import *
 
 class Room():
-    def __init__(self,level,room_type,enemy_number,connections):
+    def __init__(self,level,room_type,enemy_number):
 
-        self.room_background_path = None
-        self.room_code = None
+        self.room_type = room_type
+        self.room_background_path = self.generate_room_background_path()
         self.room_background = None
         self.enemy_number = enemy_number
         self.enemy_count = enemy_number
@@ -19,25 +19,20 @@ class Room():
         self.lasers = []
         self.portals = []
         self.portals_generated = False
-        self.connections = connections
+        self.connections = [0,1,2,3]
         self.level = level
-
-        if room_type == 0:
-            self.room_background_path = scene_1_start_room
-        else:
-            self.room_background_path = scene_1_img_name
-
-        if room_type != 0:
-            if enemy_number == 1:
-                self.room_code = rand.randint(0,1)
-            if enemy_number == 2:
-                self.room_code = rand.randint(2,3)
-
         self.room_background = pygame.image.load(self.room_background_path).convert()
-        self.room_type = room_type
 
 
-
+    def generate_room_background_path(self):
+        result = None
+        if self.room_type == 0:
+            result = scene_1_start_room
+        elif self.room_type == 2:
+            result = scene_1_boss_room
+        else:
+            result = scene_1_img_name
+        return result
 
     def generate(self,screen):
         self.generate_room(screen)
@@ -112,9 +107,8 @@ class Room():
 
 
 class Level():
-    def __init__(self,room_count,locs):
+    def __init__(self,locs):
 
-        self.room_count = room_count
         self.current_room_coor = None
         self.level_map = []
         self.locs = locs
@@ -127,84 +121,77 @@ class Level():
 
     def generate_map(self):
         coor = (None,None)
-        if self.locs != None:
 
-            #generate map layout
-            for y in range(5):
-                new_row = []
 
-                for x in range(5):
-                    coor = (x,y)
-                    added = False
-                    for l in self.locs:
-                        if l[0] == coor[0] and l[1] == coor[1]:
-                            if len(l) > 2:
-                                if l[2] == "*":
-                                    self.current_room = Room(self,0,0,[0,1,2,3])
-                                    self.current_room_coor = [coor[0],coor[1]]
-                                    new_row.append(self.current_room)
-                                    self.locs.remove(l)
-                                    added = True
-                            else:
-                                new_row.append(Room(self,1,rand.randint(1,3),[0,1,2,3]))
+        #generate map layout
+        for y in range(5):
+            new_row = []
+
+            for x in range(5):
+                coor = (x,y)
+                added = False
+                for l in self.locs:
+                    if l[0] == coor[0] and l[1] == coor[1]:
+                        if len(l) > 2:
+                            if l[2] == "*":
+                                self.current_room = Room(self,0,0)
+                                self.current_room_coor = [coor[0],coor[1]]
+                                new_row.append(self.current_room)
                                 self.locs.remove(l)
                                 added = True
-                    if not added:
-                        new_row.append(-1)
+                            elif l[2] == "x":
+                                new_row.append(Room(self,2,1))
+                                self.locs.remove(l)
+                                added = True
+                        else:
+                            new_row.append(Room(self,1,rand.randint(1,3)))
+                            self.locs.remove(l)
+                            added = True
+                if not added:
+                    new_row.append(None)
 
-                self.level_map.append(new_row)
+            self.level_map.append(new_row)
 
-            #generate connections
-            current_x = 0
-            current_y = 0
-            for y in self.level_map:
+        #generate connections
+        current_x = 0
+        current_y = 0
+        for y in self.level_map:
 
-                for x in y:
-                    #print("coor: " + str(current_x) + "," + str(current_y))
-                    if x != -1:
-                        #generate top portal
-                        if current_y == 0:
+            for x in y:
+                #print("coor: " + str(current_x) + "," + str(current_y))
+                if x != None:
+                    #generate top portal
+                    if current_y == 0:
+                        x.connections.remove(0)
+
+
+                    elif current_y > 0:
+                        if self.level_map[current_y-1][current_x] == None:
                             x.connections.remove(0)
 
-
-                        elif current_y > 0:
-                            if self.level_map[current_y-1][current_x] == -1:
-                                x.connections.remove(0)
-
-                        #generate right portal
-                        if current_x == len(y)-1:
+                    #generate right portal
+                    if current_x == len(y)-1:
+                        x.connections.remove(1)
+                    elif current_x < len(y)-1:
+                        if self.level_map[current_y][current_x+1] == None:
                             x.connections.remove(1)
-                        elif current_x < len(y)-1:
-                            if self.level_map[current_y][current_x+1] == -1:
-                                x.connections.remove(1)
 
-                        #generate bottom portal
-                        if current_y == len(self.level_map)-1:
+                    #generate bottom portal
+                    if current_y == len(self.level_map)-1:
+                        x.connections.remove(2)
+                    elif current_y < len(self.level_map)-1:
+                        if self.level_map[current_y+1][current_x] == None:
                             x.connections.remove(2)
-                        elif current_y < len(self.level_map)-1:
-                            if self.level_map[current_y+1][current_x] == -1:
-                                x.connections.remove(2)
 
-                        #generate left portal
-                        if current_x == 0:
+                    #generate left portal
+                    if current_x == 0:
+                        x.connections.remove(3)
+                    elif current_x > 0:
+                        if self.level_map[current_y][current_x-1] == None:
                             x.connections.remove(3)
-                        elif current_x > 0:
-                            if self.level_map[current_y][current_x-1] == -1:
-                                x.connections.remove(3)
 
 
-                    current_x += 1
-                current_x = 0
-                current_y += 1
-            print(self.level_map)
-        else:
-            i = 0
-
-            while i < self.room_count:
-                new_room = None
-                if i == 0:
-                    new_room = Room(self,0,0,[0,1,2,3])
-                else:
-                    new_room = Room(self,1,5,[0,1,2,3])
-                self.map.append(new_room)
-                i += 1
+                current_x += 1
+            current_x = 0
+            current_y += 1
+        #print(self.level_map)

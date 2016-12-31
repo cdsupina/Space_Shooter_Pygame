@@ -152,6 +152,8 @@ class Portal(pygame.sprite.Sprite):
                 self.level.current_room = self.level.level_map[self.level.current_room_coor[1]][self.level.current_room_coor[0]]
                 self.level.current_room.generate(screen)
                 self.level.current_room.ally_sprite_group.add(player)
+                player.rect.x = (screen_width/2)-10
+                player.rect.y = screen_height - 60
 
             if self.rect.x == screen_width-40 and self.rect.y == (screen_height/2)-20:
                 print("right portal touching player")
@@ -159,6 +161,8 @@ class Portal(pygame.sprite.Sprite):
                 self.level.current_room = self.level.level_map[self.level.current_room_coor[1]][self.level.current_room_coor[0]]
                 self.level.current_room.generate(screen)
                 self.level.current_room.ally_sprite_group.add(player)
+                player.rect.x = 60
+                player.rect.y = (screen_height/2)-10
 
             if self.rect.x == (screen_width/2)-20 and self.rect.y == screen_height-40:
                 print("bottom portal touching player")
@@ -166,6 +170,8 @@ class Portal(pygame.sprite.Sprite):
                 self.level.current_room = self.level.level_map[self.level.current_room_coor[1]][self.level.current_room_coor[0]]
                 self.level.current_room.generate(screen)
                 self.level.current_room.ally_sprite_group.add(player)
+                player.rect.x = (screen_width/2)-10
+                player.rect.y = 60
 
             if self.rect.x == 0 and self.rect.y == (screen_height/2)-20:
                 print("left portal touching player")
@@ -173,6 +179,5 @@ class Portal(pygame.sprite.Sprite):
                 self.level.current_room = self.level.level_map[self.level.current_room_coor[1]][self.level.current_room_coor[0]]
                 self.level.current_room.generate(screen)
                 self.level.current_room.ally_sprite_group.add(player)
-
-            player.rect.x = 320
-            player.rect.y = 240
+                player.rect.x = screen_width - 60
+                player.rect.y = (screen_height/2)-10
