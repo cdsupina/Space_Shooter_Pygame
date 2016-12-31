@@ -88,22 +88,33 @@ while coors_generated < room_count:
         y += 1
 
 #generate the boss room
-boss_candidate = None
-for coor in coors:
-    if boss_candidate == None:
-        boss_candidate = coor
-    elif abs(coor[0]-center[0]) + abs(coor[1]-center[1]) > abs(coor[0]-boss_candidate[0]) + abs(coor[1]-boss_candidate[1]):
-        boss_candidate = coor
 
-print(boss_candidate)
+#find rooms that are the furthest from the starting room
+max_dist = 0
+boss_candidates = []
 for coor in coors:
-    if boss_candidate == coor:
+    dist = abs(coor[0]-center[0]) + abs(coor[1]-center[1])
+    #print(str(coor) + " " + str(dist))
+    if dist > max_dist:
+        max_dist = dist
+
+#add rooms with the maximum distance to the list of candidates
+for coor in coors:
+    if abs(coor[0]-center[0]) + abs(coor[1]-center[1]) == max_dist:
+        boss_candidates.append(coor)
+
+#choose a candidate
+boss_room = boss_candidates[rand.randint(0,len(boss_candidates)-1)]
+
+for coor in coors:
+    if boss_room == coor:
         new_coor = (coor[0],coor[1],"x")
         coors.remove(coor)
         coors.append(new_coor)
         break
 
-print(coors)
+print(boss_candidates)
+print(boss_room)
 for row in floor_map:
     print(row)
 #level_1 = Level([(2,0),(4,0,"x"),(0,1),(2,1),(4,1),(0,2),(1,2),(2,2,"*"),(3,2),(4,2),(2,3),(2,4)])
