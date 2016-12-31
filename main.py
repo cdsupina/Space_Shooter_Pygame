@@ -42,11 +42,10 @@ paused = False
 
 #initialize first room
 
-size = 6
+size = 5
 spaces = size*size
 room_count = spaces//2
 center = (size//2,size//2)
-
 floor_map = []
 coors = []
 #first run through, generate map full of coordinates, marking the center coordinate appropriatly
@@ -65,9 +64,7 @@ for row in range(size):
     floor_map.append(new_row)
 
 #generate rest of rooms
-
 #print(coors)
-
 coors_generated = 5
 
 while coors_generated < room_count:
@@ -90,7 +87,21 @@ while coors_generated < room_count:
         #print(floor_map)
         y += 1
 
+#generate the boss room
+boss_candidate = None
+for coor in coors:
+    if boss_candidate == None:
+        boss_candidate = coor
+    elif abs(coor[0]-center[0]) + abs(coor[1]-center[1]) > abs(coor[0]-boss_candidate[0]) + abs(coor[1]-boss_candidate[1]):
+        boss_candidate = coor
 
+print(boss_candidate)
+for coor in coors:
+    if boss_candidate == coor:
+        new_coor = (coor[0],coor[1],"x")
+        coors.remove(coor)
+        coors.append(new_coor)
+        break
 
 print(coors)
 for row in floor_map:
