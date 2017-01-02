@@ -107,32 +107,111 @@ class Room():
 
 
 class Level():
-    def __init__(self,locs):
+    def __init__(self,size):
 
         self.current_room_coor = None
+        self.size = size
         self.level_map = []
-        self.locs = locs
+        self.locs = self.generate_locations()
         self.current_room = None
         self.generate_map()
         #self.current_room = self.rooms[0]
 
 
+    def generate_locations(self):
 
+        spaces = self.size*self.size
+        room_count = spaces//2
+        center = (self.size//2,self.size//2)
+        floor_map = []
+        coors = []
+        #first run through, generate map full of coordinates, marking the center coordinate appropriatly
+        for row in range(self.size):
+            new_row = []
+            for col in range(self.size):
+                current_coor = (col,row)
+                if current_coor == (center):
+                    new_row.append((col,row,"*"))
+                    coors.append((col,row,"*"))
+                elif current_coor == (center[0]+1,center[1]) or current_coor == (center[0]-1,center[1]) or current_coor == (center[0],center[1]+1) or current_coor == (center[0],center[1]-1):
+                    new_row.append((col,row))
+                    coors.append((col,row))
+                else:
+                    new_row.append(None)
+            floor_map.append(new_row)
+
+        #generate rest of rooms
+        #print(coors)
+        coors_generated = 5
+
+        while coors_generated < room_count:
+
+            y=0
+            for row in floor_map:
+                room_gen = rand.randint(0,self.size-1)
+                if row[room_gen] == None and coors_generated < room_count:
+                    coor_candidate = (room_gen,y)
+                    coor_added = False
+                    for coor in coors:
+                        if coor_candidate[1] == coor[1] and coor_candidate[0] == coor[0]+1 or coor_candidate[1] == coor[1] and coor_candidate[0] == coor[0]-1 or coor_candidate[0] == coor[0] and coor_candidate[1] == coor[1]+1 or coor_candidate[0] == coor[0] and coor_candidate[1] == coor[1]-1:
+                            coors_generated += 1
+                            coors.append(coor_candidate)
+                            coor_added = True
+                            row[room_gen] = coor_candidate
+                            #print(coors)
+                        if coor_added:
+                            break
+                #print(floor_map)
+                y += 1
+
+        #generate the boss room
+
+        #find rooms that are the furthest from the starting room
+        max_dist = 0
+        boss_candidates = []
+        for coor in coors:
+            dist = abs(coor[0]-center[0]) + abs(coor[1]-center[1])
+            #print(str(coor) + " " + str(dist))
+            if dist > max_dist:
+                max_dist = dist
+
+        #add rooms with the maximum distance to the list of candidates
+        for coor in coors:
+            if abs(coor[0]-center[0]) + abs(coor[1]-center[1]) == max_dist:
+                boss_candidates.append(coor)
+
+        #choose a candidate
+        boss_room = boss_candidates[rand.randint(0,len(boss_candidates)-1)]
+
+        for coor in coors:
+            if boss_room == coor:
+                new_coor = (coor[0],coor[1],"x")
+                coors.remove(coor)
+                coors.append(new_coor)
+                break
+
+        print(boss_candidates)
+        print(boss_room)
+        for row in floor_map:
+            print(row)
+
+        return coors
 
     def generate_map(self):
         coor = (None,None)
 
 
         #generate map layout
-        for y in range(5):
+        for y in range(self.size):
             new_row = []
 
-            for x in range(5):
+            for x in range(self.size):
                 coor = (x,y)
                 added = False
                 for l in self.locs:
                     if l[0] == coor[0] and l[1] == coor[1]:
                         if len(l) > 2:
+
                             if l[2] == "*":
                                 self.current_room = Room(self,0,0)
                                 self.current_room_coor = [coor[0],coor[1]]

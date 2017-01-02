@@ -43,83 +43,11 @@ paused = False
 #initialize first room
 
 size = 5
-spaces = size*size
-room_count = spaces//2
-center = (size//2,size//2)
-floor_map = []
-coors = []
-#first run through, generate map full of coordinates, marking the center coordinate appropriatly
-for row in range(size):
-    new_row = []
-    for col in range(size):
-        current_coor = (col,row)
-        if current_coor == (center):
-            new_row.append((col,row,"*"))
-            coors.append((col,row,"*"))
-        elif current_coor == (center[0]+1,center[1]) or current_coor == (center[0]-1,center[1]) or current_coor == (center[0],center[1]+1) or current_coor == (center[0],center[1]-1):
-            new_row.append((col,row))
-            coors.append((col,row))
-        else:
-            new_row.append(None)
-    floor_map.append(new_row)
 
-#generate rest of rooms
-#print(coors)
-coors_generated = 5
-
-while coors_generated < room_count:
-
-    y=0
-    for row in floor_map:
-        room_gen = rand.randint(0,size-1)
-        if row[room_gen] == None and coors_generated < room_count:
-            coor_candidate = (room_gen,y)
-            coor_added = False
-            for coor in coors:
-                if coor_candidate[1] == coor[1] and coor_candidate[0] == coor[0]+1 or coor_candidate[1] == coor[1] and coor_candidate[0] == coor[0]-1 or coor_candidate[0] == coor[0] and coor_candidate[1] == coor[1]+1 or coor_candidate[0] == coor[0] and coor_candidate[1] == coor[1]-1:
-                    coors_generated += 1
-                    coors.append(coor_candidate)
-                    coor_added = True
-                    row[room_gen] = coor_candidate
-                    #print(coors)
-                if coor_added:
-                    break
-        #print(floor_map)
-        y += 1
-
-#generate the boss room
-
-#find rooms that are the furthest from the starting room
-max_dist = 0
-boss_candidates = []
-for coor in coors:
-    dist = abs(coor[0]-center[0]) + abs(coor[1]-center[1])
-    #print(str(coor) + " " + str(dist))
-    if dist > max_dist:
-        max_dist = dist
-
-#add rooms with the maximum distance to the list of candidates
-for coor in coors:
-    if abs(coor[0]-center[0]) + abs(coor[1]-center[1]) == max_dist:
-        boss_candidates.append(coor)
-
-#choose a candidate
-boss_room = boss_candidates[rand.randint(0,len(boss_candidates)-1)]
-
-for coor in coors:
-    if boss_room == coor:
-        new_coor = (coor[0],coor[1],"x")
-        coors.remove(coor)
-        coors.append(new_coor)
-        break
-
-print(boss_candidates)
-print(boss_room)
-for row in floor_map:
-    print(row)
 #level_1 = Level([(2,0),(4,0,"x"),(0,1),(2,1),(4,1),(0,2),(1,2),(2,2,"*"),(3,2),(4,2),(2,3),(2,4)])
-level_1 = Level(coors)
+level_1 = Level(size)
 #add the player to the allies sprite group
+print(level_1.current_room)
 level_1.current_room.ally_sprite_group.add(player)
 
 scene_0_images = [(title,(0,0))]
