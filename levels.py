@@ -3,6 +3,13 @@ import random as rand
 from sprites import *
 from values import *
 
+
+#rooms
+#unexplored_room = pygame.image.load(unexplored_room_img).convert_alpha()
+#explored_room = pygame.image.load(explored_room_img).convert_alpha()
+#starting_room = pygame.image.load(starting_room_img).convert_alpha()
+#boss_room = pygame.image.load(boss_room_img).convert_alpha()
+#map_overlay_backgrounds = [map_bg]
 class Room():
     def __init__(self,level,room_type,enemy_number):
 
@@ -115,6 +122,7 @@ class Level():
         self.locs = self.generate_locations()
         self.current_room = None
         self.generate_map()
+        #self.user_map = map_overlay = Splash_Screen((0,0),0,map_overlay_backgrounds,[(starting_room,(305,225))],[])
         #self.current_room = self.rooms[0]
 
 

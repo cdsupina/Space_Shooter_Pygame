@@ -31,7 +31,12 @@ class Splash_Screen():
         else:
             screen.blit(self.frames[0],self.loc)
             self.display_buttons(screen)
+            self.display_images(screen)
 
     def display_buttons(self,screen):
         for b in self.button_info:
             self.buttons.append(screen.blit(b[0],b[1]))
+
+    def display_images(self,screen):
+        for i in self.images:
+            screen.blit(i[0],i[1])

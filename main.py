@@ -33,13 +33,20 @@ start_button = pygame.image.load(start_button_img_name).convert()
 quit_button = pygame.image.load(quit_button_img_name).convert()
 continue_button = pygame.image.load(continue_button_img_name).convert()
 pause_menu = pygame.image.load(pause_menu_img_name).convert_alpha()
+map_bg = pygame.image.load(map_overlay_img).convert_alpha()
+
+#rooms
+unexplored_room = pygame.image.load(unexplored_room_img).convert_alpha()
+explored_room = pygame.image.load(explored_room_img).convert_alpha()
+starting_room = pygame.image.load(starting_room_img).convert_alpha()
+boss_room = pygame.image.load(boss_room_img).convert_alpha()
 
 #initialize the player
 player = Ship(player_img_name,10,100,100)
 
 #set paused status to false
 paused = False
-
+map_showing = False
 #initialize first room
 
 size = 5
@@ -47,7 +54,7 @@ size = 5
 #level_1 = Level([(2,0),(4,0,"x"),(0,1),(2,1),(4,1),(0,2),(1,2),(2,2,"*"),(3,2),(4,2),(2,3),(2,4)])
 level_1 = Level(size)
 #add the player to the allies sprite group
-print(level_1.current_room)
+#print(level_1.current_room)
 level_1.current_room.ally_sprite_group.add(player)
 
 scene_0_images = [(title,(0,0))]
@@ -58,6 +65,10 @@ pause_menu_backgrounds = [pause_menu]
 pause_menu_images = []
 pause_menu_buttons = [(continue_button,(220,193)),(quit_button,(220,266))]
 pause_menu = Splash_Screen((160,120),0,pause_menu_backgrounds,pause_menu_images,pause_menu_buttons)
+
+map_overlay_backgrounds = [map_bg]
+map_overlay = Splash_Screen((0,0),0,map_overlay_backgrounds,[(starting_room,(305,225))],[])
+
 
 while True:
 
@@ -95,6 +106,8 @@ while True:
 
             player.behave(speed)
 
+        if map_showing:
+            map_overlay.display(screen,dt)
 
     ##########EVENT-LISTENING##########
     for event in pygame.event.get():
@@ -146,5 +159,10 @@ while True:
                     paused = True
                 elif paused:
                     paused = False
+            if event.key == K_m:
+                if not map_showing:
+                    map_showing = True
+                elif map_showing:
+                    map_showing = False
 
     pygame.display.update()
