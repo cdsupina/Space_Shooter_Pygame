@@ -7,19 +7,16 @@ from values import *
 from levels import *
 from splash_screens import *
 import math
+from assets import *
 
 #setup frames per second
 clock = pygame.time.Clock()
-
 #set initial scene to 0
 scene = 0
-
 #start pygame
 pygame.init()
-
 #set up screen display and images
 screen = pygame.display.set_mode(SCREEN_SIZE,0,32)
-
 #initialize all images
 scene_0_backgrounds = []
 
@@ -27,7 +24,6 @@ for s in scene_0_background_img_names:
     scene_0_backgrounds.append(pygame.image.load(s).convert())
 
 title = pygame.image.load(title_img_name).convert_alpha()
-title_background = pygame.image.load(background_img_name).convert()
 scene_1_background = pygame.image.load(scene_1_img_name).convert()
 start_button = pygame.image.load(start_button_img_name).convert()
 quit_button = pygame.image.load(quit_button_img_name).convert()

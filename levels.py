@@ -2,6 +2,7 @@ import pygame
 import random as rand
 from sprites import *
 from values import *
+from assets import *
 
 
 #rooms
