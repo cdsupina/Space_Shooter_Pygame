@@ -1,7 +1,14 @@
 import pygame
 from values import *
 
-class Ship(pygame.sprite.Sprite):
+'''
+class: controllable player
+    image: path to the image for the sprite
+    speed: speed of the player
+    init_x: initial x coordinate of the player
+    init_y: initial y coordinate of the player
+'''
+class Player(pygame.sprite.Sprite):
     def __init__(self,image,speed,init_x,init_y):
         super().__init__()
 
@@ -15,6 +22,10 @@ class Ship(pygame.sprite.Sprite):
         self.x_change = 0
         self.y_change = 0
 
+    '''
+    function: behave by  adjusting the values
+        speed: float speed of the game
+    '''
     def behave(self,speed):
         self.rect.x += self.x_change*speed
         self.rect.y += self.y_change*speed
@@ -28,7 +39,10 @@ class Ship(pygame.sprite.Sprite):
         if self.rect.y <= 0:
             self.rect.y = 0
 
-
+    '''
+    function: adjust x_change or y_change
+        direction: integer 0 through 3 representing different directions
+    '''
     def accelerate(self,direction):
         if direction == 0:
             self.y_change = -self.speed
@@ -39,6 +53,10 @@ class Ship(pygame.sprite.Sprite):
         if direction == 3:
             self.x_change = self.speed
 
+    '''
+    function: set x_change or y_change to 0
+        direction: integer 0 through 3 representing different directions
+    '''
     def deccelerate(self,direction):
         if direction == 0:
             self.y_change = 0
@@ -48,6 +66,7 @@ class Ship(pygame.sprite.Sprite):
             self.x_change = 0
         if direction == 3:
             self.x_change = 0
+
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self,room,image,speed,displacement,init_x,init_y):

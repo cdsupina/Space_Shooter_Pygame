@@ -19,7 +19,7 @@ pygame.init()
 screen = pygame.display.set_mode(SCREEN_SIZE,0,32)
 
 #initialize the player
-player = Ship(player_img_name,10,100,100)
+player = Player(player_img_name,10,100,100)
 
 #set paused status to false
 paused = False
