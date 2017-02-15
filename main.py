@@ -17,25 +17,6 @@ scene = 0
 pygame.init()
 #set up screen display and images
 screen = pygame.display.set_mode(SCREEN_SIZE,0,32)
-#initialize all images
-scene_0_backgrounds = []
-
-for s in scene_0_background_img_names:
-    scene_0_backgrounds.append(pygame.image.load(s).convert())
-
-title = pygame.image.load(title_img_name).convert_alpha()
-scene_1_background = pygame.image.load(scene_1_img_name).convert()
-start_button = pygame.image.load(start_button_img_name).convert()
-quit_button = pygame.image.load(quit_button_img_name).convert()
-continue_button = pygame.image.load(continue_button_img_name).convert()
-pause_menu = pygame.image.load(pause_menu_img_name).convert_alpha()
-map_bg = pygame.image.load(map_overlay_img).convert_alpha()
-
-#rooms
-unexplored_room = pygame.image.load(unexplored_room_img).convert_alpha()
-explored_room = pygame.image.load(explored_room_img).convert_alpha()
-starting_room = pygame.image.load(starting_room_img).convert_alpha()
-boss_room = pygame.image.load(boss_room_img).convert_alpha()
 
 #initialize the player
 player = Ship(player_img_name,10,100,100)
@@ -53,23 +34,23 @@ level_1 = Level(size)
 #print(level_1.current_room)
 level_1.current_room.ally_sprite_group.add(player)
 
-scene_0_images = [(title,(0,0))]
-scene_0_buttons = [(start_button,(220,200)),(quit_button,(220,300))]
-title_screen = Splash_Screen((0,0),150,scene_0_backgrounds,scene_0_images,scene_0_buttons)
+scene_0_images = [(title_img_name,(0,0))]
+scene_0_buttons = [(start_button_img_name,(220,200)),(quit_button_img_name,(220,300))]
+title_screen = Splash_Screen((0,0),150,scene_0_background_img_names,scene_0_images,scene_0_buttons)
 
-pause_menu_backgrounds = [pause_menu]
+pause_menu_backgrounds = [pause_menu_img_name]
 pause_menu_images = []
-pause_menu_buttons = [(continue_button,(220,193)),(quit_button,(220,266))]
+pause_menu_buttons = [(continue_button_img_name,(220,193)),(quit_button_img_name,(220,266))]
 pause_menu = Splash_Screen((160,120),0,pause_menu_backgrounds,pause_menu_images,pause_menu_buttons)
 
-map_overlay_backgrounds = [map_bg]
-map_overlay = Splash_Screen((0,0),0,map_overlay_backgrounds,[(starting_room,(305,225))],[])
+map_overlay_backgrounds = [map_overlay_img]
+map_overlay = Splash_Screen((0,0),0,map_overlay_backgrounds,[(starting_room_img,(305,225))],[])
 
 
 while True:
 
     #set clock to save the time between frames
-    dt = clock.tick(fps)
+    dt = clock.tick(FPS)
     speed = float(dt)/64
 
     ##########SCENE-RENDERING#########
@@ -115,17 +96,17 @@ while True:
         if event.type == MOUSEBUTTONUP:
             if event.button == 1:
                 if scene == 0:
-                    if title_screen.buttons[0].collidepoint(pygame.mouse.get_pos()):
+                    if title_screen.button_disp[0].collidepoint(pygame.mouse.get_pos()):
                         scene = 1
                         level_1.current_room.generate(screen)
 
-                    if title_screen.buttons[1].collidepoint(pygame.mouse.get_pos()):
+                    if title_screen.button_disp[1].collidepoint(pygame.mouse.get_pos()):
                         exit()
                 if scene == 1:
                     if paused:
-                        if pause_menu.buttons[0].collidepoint(pygame.mouse.get_pos()):
+                        if pause_menu.button_disp[0].collidepoint(pygame.mouse.get_pos()):
                             paused = False
-                        if pause_menu.buttons[1].collidepoint(pygame.mouse.get_pos()):
+                        if pause_menu.button_disp[1].collidepoint(pygame.mouse.get_pos()):
                             exit()
 
         if event.type == KEYDOWN:

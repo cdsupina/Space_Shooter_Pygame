@@ -4,13 +4,6 @@ from sprites import *
 from values import *
 from assets import *
 
-
-#rooms
-#unexplored_room = pygame.image.load(unexplored_room_img).convert_alpha()
-#explored_room = pygame.image.load(explored_room_img).convert_alpha()
-#starting_room = pygame.image.load(starting_room_img).convert_alpha()
-#boss_room = pygame.image.load(boss_room_img).convert_alpha()
-#map_overlay_backgrounds = [map_bg]
 class Room():
     def __init__(self,level,room_type,enemy_number):
 
@@ -62,13 +55,13 @@ class Room():
         for c in self.connections:
             loc = (100,100)
             if c == 0:
-                loc = ((screen_width/2)-20,0)
+                loc = ((SCREEN_WIDTH/2)-20,0)
             elif c == 1:
-                loc = (screen_width-40,(screen_height/2)-20)
+                loc = (SCREEN_WIDTH-40,(SCREEN_HEIGHT/2)-20)
             elif c == 2:
-                loc = ((screen_width/2)-20,screen_height-40)
+                loc = ((SCREEN_WIDTH/2)-20,SCREEN_HEIGHT-40)
             elif c == 3:
-                loc = (0,(screen_height/2)-20)
+                loc = (0,(SCREEN_HEIGHT/2)-20)
             portal = Portal(self,self.level,portal_unexplored_img_names,90,loc[0],loc[1])
             self.interactable_sprite_group.add(portal)
             self.portals.append(portal)

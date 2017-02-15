@@ -19,12 +19,12 @@ class Ship(pygame.sprite.Sprite):
         self.rect.x += self.x_change*speed
         self.rect.y += self.y_change*speed
 
-        if self.rect.x >= screen_width-20:
-            self.rect.x = screen_width-20
+        if self.rect.x >= SCREEN_WIDTH-20:
+            self.rect.x = SCREEN_WIDTH-20
         if self.rect.x <= 0:
             self.rect.x = 0
-        if self.rect.y >= screen_height-20:
-            self.rect.y = screen_height-20
+        if self.rect.y >= SCREEN_HEIGHT-20:
+            self.rect.y = SCREEN_HEIGHT-20
         if self.rect.y <= 0:
             self.rect.y = 0
 
@@ -72,7 +72,7 @@ class Enemy(pygame.sprite.Sprite):
         if self.current_displacement>=self.max_displacement:
             self.x_speed = -self.x_speed
 
-        if self.rect.y >= screen_height - self.image.get_height() or self.rect.y <= 0:
+        if self.rect.y >= SCREEN_HEIGHT - self.image.get_height() or self.rect.y <= 0:
             self.y_speed = -self.y_speed
 
         self.rect.x += self.x_speed*speed
@@ -146,38 +146,38 @@ class Portal(pygame.sprite.Sprite):
     def on_collision(self,player,screen):
         if self.rect.colliderect(player.rect):
             #print("portal touching player")
-            if self.rect.x == (screen_width/2)-20 and self.rect.y == 0:
+            if self.rect.x == (SCREEN_WIDTH/2)-20 and self.rect.y == 0:
                 #print("top portal touching player")
                 self.level.current_room_coor[1] -= 1
                 self.level.current_room = self.level.level_map[self.level.current_room_coor[1]][self.level.current_room_coor[0]]
                 self.level.current_room.generate(screen)
                 self.level.current_room.ally_sprite_group.add(player)
-                player.rect.x = (screen_width/2)-10
-                player.rect.y = screen_height - 60
+                player.rect.x = (SCREEN_WIDTH/2)-10
+                player.rect.y = SCREEN_HEIGHT - 60
 
-            if self.rect.x == screen_width-40 and self.rect.y == (screen_height/2)-20:
+            if self.rect.x == SCREEN_WIDTH-40 and self.rect.y == (SCREEN_HEIGHT/2)-20:
                 #print("right portal touching player")
                 self.level.current_room_coor[0] += 1
                 self.level.current_room = self.level.level_map[self.level.current_room_coor[1]][self.level.current_room_coor[0]]
                 self.level.current_room.generate(screen)
                 self.level.current_room.ally_sprite_group.add(player)
                 player.rect.x = 60
-                player.rect.y = (screen_height/2)-10
+                player.rect.y = (SCREEN_HEIGHT/2)-10
 
-            if self.rect.x == (screen_width/2)-20 and self.rect.y == screen_height-40:
+            if self.rect.x == (SCREEN_WIDTH/2)-20 and self.rect.y == SCREEN_HEIGHT-40:
                 #print("bottom portal touching player")
                 self.level.current_room_coor[1] += 1
                 self.level.current_room = self.level.level_map[self.level.current_room_coor[1]][self.level.current_room_coor[0]]
                 self.level.current_room.generate(screen)
                 self.level.current_room.ally_sprite_group.add(player)
-                player.rect.x = (screen_width/2)-10
+                player.rect.x = (SCREEN_WIDTH/2)-10
                 player.rect.y = 60
 
-            if self.rect.x == 0 and self.rect.y == (screen_height/2)-20:
+            if self.rect.x == 0 and self.rect.y == (SCREEN_HEIGHT/2)-20:
                 #print("left portal touching player")
                 self.level.current_room_coor[0] -= 1
                 self.level.current_room = self.level.level_map[self.level.current_room_coor[1]][self.level.current_room_coor[0]]
                 self.level.current_room.generate(screen)
                 self.level.current_room.ally_sprite_group.add(player)
-                player.rect.x = screen_width - 60
-                player.rect.y = (screen_height/2)-10
+                player.rect.x = SCREEN_WIDTH - 60
+                player.rect.y = (SCREEN_HEIGHT/2)-10
