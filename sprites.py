@@ -72,7 +72,7 @@ class: enemy to be spawned in rooms
     room: room object that the enemy will occupy
     image: string path to the image used
     speed: integer speed of the enemy
-    displacement: 
+    displacement:
     init_x: integer initial x location of the enemy
     init_y: integer initial y location of the enemy
 '''
@@ -133,6 +133,7 @@ class Player_Laser(pygame.sprite.Sprite):
         self.width = self.image.get_width()
         self.height = self.image.get_height()
         self.time_spawned = 0
+
     '''
     function: behave by adjusting the values of the object
         speed: float speed of the game
@@ -144,8 +145,9 @@ class Player_Laser(pygame.sprite.Sprite):
         if self.time_spawned >= 1000:
             self.room.laser_sprite_group.remove(self)
             self.room.lasers.remove(self)
+
     '''
-    function: what to do when the object collides with an enemy 
+    function: what to do when the object collides with an enemy
         enemy: enemy object that has been collided with
     '''
     def on_collision(self,enemy):
@@ -159,6 +161,15 @@ class Player_Laser(pygame.sprite.Sprite):
     def __repr__(self):
         return "X coor: " + str(self.rect.x) + " Y coor: " + str(self.rect.y) + " Time: " + str(self.time_spawned)
 
+'''
+class: portal to transport player to different rooms
+    room: room object that the portal occupies
+    level: level object that the room occupies
+    frames: list of strings of paths to
+    ani_time: float time time between frames in the animation
+    x: integer initial x location of the portal
+    y: integer initial y location of the portal
+'''
 class Portal(pygame.sprite.Sprite):
     def __init__(self,room,level,frames,ani_time,x,y):
         super().__init__()
@@ -175,6 +186,10 @@ class Portal(pygame.sprite.Sprite):
         self.current_ani_time = ani_time
         self.level = level
 
+    '''
+    function: animate the portal
+        dt: float time passed in a mainloop cycle
+    '''
     def animate(self,dt):
         if self.current_ani_time >= self.ani_time:
             self.current_ani_time = 0
@@ -187,6 +202,11 @@ class Portal(pygame.sprite.Sprite):
         else:
             self.current_ani_time += dt
 
+    '''
+    function: what to do when a player collides with a portal
+        player: player object that is collided with
+        screen: pygame display object that is displayed on
+    '''
     def on_collision(self,player,screen):
         if self.rect.colliderect(player.rect):
             #print("portal touching player")
