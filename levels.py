@@ -4,6 +4,12 @@ from sprites import *
 from values import *
 from assets import *
 
+'''
+class: room to make up levels
+    level: level object that the room belongs to
+    room_type: integer representing the type of room
+    enemy_number: interger number of enemies to be spawned in the room
+'''
 class Room():
     def __init__(self,level,room_type,enemy_number):
 
@@ -24,7 +30,9 @@ class Room():
         self.level = level
         self.room_background = pygame.image.load(self.room_background_path).convert()
 
-
+    '''
+    function: generate the string path to the background to be used
+    '''
     def generate_room_background_path(self):
         result = None
         if self.room_type == 0:
@@ -35,13 +43,24 @@ class Room():
             result = scene_1_img_name
         return result
 
+    '''
+    function: generate the room and enemies
+        screen: pygame display to generate on
+    '''
     def generate(self,screen):
         self.generate_room(screen)
         self.generate_enemies()
-
+    
+    '''
+    function: generate the room
+        screen: pygame display to generate on
+    '''
     def generate_room(self,screen):
         screen.blit(self.room_background,(0,0))
-
+    
+    '''
+    function: generate the enemies in the room
+    '''
     def generate_enemies(self):
 
         i=0
@@ -50,7 +69,10 @@ class Room():
             self.enemy_sprite_group.add(enemy)
             self.enemies.append(enemy)
             i += 1
-
+    
+    '''
+    function: generate the rooms portals
+    '''
     def generate_portals(self):
         for c in self.connections:
             loc = (100,100)
@@ -65,27 +87,53 @@ class Room():
             portal = Portal(self,self.level,portal_unexplored_img_names,90,loc[0],loc[1])
             self.interactable_sprite_group.add(portal)
             self.portals.append(portal)
-
+    
+    '''
+    function: generate the players laser
+        player: player object to generate the lasers for
+    '''
     def generate_player_laser(self,player):
         new_laser = Player_Laser(self,player_laser_img_name,20,(player.rect.x+(player.width/2)-(5/2)),player.rect.y)
         self.laser_sprite_group.add(new_laser)
         self.lasers.append(new_laser)
 
+    '''
+    function: draw the enemies for the room
+        screen: pygame display to draw the enemies on
+    '''
     def draw_enemies(self,screen):
         self.enemy_sprite_group.draw(screen)
 
+    '''
+    function: draw the lasers in the room
+        screen: pygame display to draw the lasers in
+    '''
     def draw_lasers(self,screen):
         self.laser_sprite_group.draw(screen)
 
+    '''
+    function: draw allies in the room
+        screen: pygame display to draw the allies in
+    '''
     def draw_allies(self,screen):
         self.ally_sprite_group.draw(screen)
 
+    '''
+    function: draw the portals in the room
+        screen: pygame display to draw the portals on
+        dt: time passed between cycles of the main loop
+    '''
     def draw_portals(self,screen,dt):
         for p in self.portals:
             p.animate(dt)
 
         self.interactable_sprite_group.draw(screen)
 
+    '''
+    function: draw everything in the room
+        screen: pygame display to draw it on
+        dt: time passed between cycles of the main loop
+    '''
     def draw_all(self,screen,dt):
         self.generate_room(screen)
         self.draw_enemies(screen)
@@ -106,7 +154,10 @@ class Room():
     def __repr__(self):
         return str(self.room_type)+ " " + str(self.connections) + " " + str(self.level.current_room_coor)
 
-
+'''
+class: level to contain an array of levels
+    size: integer size of the level (side of a square)
+'''
 class Level():
     def __init__(self,size):
 
@@ -119,7 +170,9 @@ class Level():
         #self.user_map = map_overlay = Splash_Screen((0,0),0,map_overlay_backgrounds,[(starting_room,(305,225))],[])
         #self.current_room = self.rooms[0]
 
-
+    '''
+    function: generate locations of rooms
+    '''
     def generate_locations(self):
 
         spaces = self.size*self.size
@@ -198,7 +251,10 @@ class Level():
             print(row)
 
         return coors
-
+    
+    '''
+    function: generate the levels map
+    '''
     def generate_map(self):
         coor = (None,None)
 
