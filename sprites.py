@@ -67,7 +67,15 @@ class Player(pygame.sprite.Sprite):
         if direction == 3:
             self.x_change = 0
 
-
+'''
+class: enemy to be spawned in rooms
+    room: room object that the enemy will occupy
+    image: string path to the image used
+    speed: integer speed of the enemy
+    displacement: 
+    init_x: integer initial x location of the enemy
+    init_y: integer initial y location of the enemy
+'''
 class Enemy(pygame.sprite.Sprite):
     def __init__(self,room,image,speed,displacement,init_x,init_y):
         super().__init__()
@@ -83,8 +91,10 @@ class Enemy(pygame.sprite.Sprite):
         self.rect.y = init_y
         self.loc_init = (self.rect.x,self.rect.y)
 
-
-
+    '''
+    function: behave by adjusting the objects values
+        speed: float speed of the game
+    '''
     def behave(self,speed):
         self.current_displacement = abs(self.loc_init[0]-self.rect.x)
 
@@ -102,6 +112,14 @@ class Enemy(pygame.sprite.Sprite):
         elif self.rect.x <= (self.loc_init[0]-self.max_displacement):
             self.rect.x = self.loc_init[0]-self.max_displacement
 
+'''
+class: laser projectile from the player
+   room: room object that the laser will occupy
+   image: pygame image of the laser
+   speed: integer speed of the laser
+   x: integer x coordinate of the spawn location
+   y: integer y coordinate of the spawn location
+'''
 class Player_Laser(pygame.sprite.Sprite):
     def __init__(self,room,image,speed,x,y):
         super().__init__()
@@ -115,14 +133,21 @@ class Player_Laser(pygame.sprite.Sprite):
         self.width = self.image.get_width()
         self.height = self.image.get_height()
         self.time_spawned = 0
-
+    '''
+    function: behave by adjusting the values of the object
+        speed: float speed of the game
+        dt: float time between cycles of the main loop
+    '''
     def behave(self,speed,dt):
         self.rect.y += -self.speed*speed
         self.time_spawned += dt
         if self.time_spawned >= 1000:
             self.room.laser_sprite_group.remove(self)
             self.room.lasers.remove(self)
-
+    '''
+    function: what to do when the object collides with an enemy 
+        enemy: enemy object that has been collided with
+    '''
     def on_collision(self,enemy):
         if self.rect.colliderect(enemy.rect):
             self.room.laser_sprite_group.remove(self)
